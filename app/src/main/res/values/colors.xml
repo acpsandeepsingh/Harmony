@@ -32,4 +32,21 @@
     <color name="light_dialog_background_color">#FFFFFF</color>
     <color name="white_secondary">#F5F5F5</color>
     <color name="subscribe_text_color">#000000</color>
+    <color name="placeholder_background">#808080</color>
+    <color name="placeholder_foreground">#FFFFFF</color>
+    <color name="video_overlay_color">#80000000</color>
+    <color name="dark_selected_color">#33FFFFFF</color>
+    <color name="light_selected_color">#33000000</color>
+    <color name="selected_background_color">#10000000</color>
+    <color name="transparent_background_color">#00000000</color>
+    <color name="dark_shadow_start_color">#40000000</color>
+    <color name="light_shadow_start_color">#40000000</color>
+    <color name="drawer_header_font_color">#FFFFFF</color>
+    <color name="duration_text_color">#FFFFFF</color>
+    <color name="playlist_stream_count_background_color">#80000000</color>
+    <color name="duration_background_color">#80000000</color>
+    <color name="bluegray">#607D8B</color>
+    <color name="black">#000000</color>
+    <color name="queue_background_color">#1C1C1E</color>
+    <color name="ic_launcher_background">#FFFFFF</color>
 </resources>

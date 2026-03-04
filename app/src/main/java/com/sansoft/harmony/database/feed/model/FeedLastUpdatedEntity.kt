@@ -1,39 +1,21 @@
+/*
+ * SPDX-FileCopyrightText: 2024 NewPipe contributors <https://newpipe.net>
+ * SPDX-FileCopyrightText: 2024-2025 NewPipe e.V. <https://newpipe-ev.de>
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 package com.sansoft.harmony.database.feed.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.sansoft.harmony.database.feed.model.FeedLastUpdatedEntity.Companion.FEED_LAST_UPDATED_TABLE
-import com.sansoft.harmony.database.feed.model.FeedLastUpdatedEntity.Companion.SUBSCRIPTION_ID
-import com.sansoft.harmony.database.subscription.SubscriptionEntity
-import java.time.OffsetDateTime
 
-@Entity(
-    tableName = FEED_LAST_UPDATED_TABLE,
-    foreignKeys = [
-        ForeignKey(
-            entity = SubscriptionEntity::class,
-            parentColumns = [SubscriptionEntity.SUBSCRIPTION_UID],
-            childColumns = [SUBSCRIPTION_ID],
-            onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE,
-            deferred = true
-        )
-    ]
-)
+@Entity(tableName = "feed_last_updated")
 data class FeedLastUpdatedEntity(
     @PrimaryKey
-    @ColumnInfo(name = SUBSCRIPTION_ID)
-    var subscriptionId: Long,
+    @ColumnInfo(name = "feed_url")
+    val feedUrl: String,
 
-    @ColumnInfo(name = LAST_UPDATED)
-    var lastUpdated: OffsetDateTime? = null
-) {
-    companion object {
-        const val FEED_LAST_UPDATED_TABLE = "feed_last_updated"
-
-        const val SUBSCRIPTION_ID = "subscription_id"
-        const val LAST_UPDATED = "last_updated"
-    }
-}
+    @ColumnInfo(name = "last_updated")
+    val lastUpdated: Long
+)

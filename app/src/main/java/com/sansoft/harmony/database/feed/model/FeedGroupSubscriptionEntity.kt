@@ -1,50 +1,24 @@
+/*
+ * SPDX-FileCopyrightText: 2024 NewPipe contributors <https://newpipe.net>
+ * SPDX-FileCopyrightText: 2024-2025 NewPipe e.V. <https://newpipe-ev.de>
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 package com.sansoft.harmony.database.feed.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import com.sansoft.harmony.database.feed.model.FeedGroupSubscriptionEntity.Companion.FEED_GROUP_SUBSCRIPTION_TABLE
-import com.sansoft.harmony.database.feed.model.FeedGroupSubscriptionEntity.Companion.GROUP_ID
-import com.sansoft.harmony.database.feed.model.FeedGroupSubscriptionEntity.Companion.SUBSCRIPTION_ID
-import com.sansoft.harmony.database.subscription.SubscriptionEntity
+import androidx.room.PrimaryKey
 
-@Entity(
-    tableName = FEED_GROUP_SUBSCRIPTION_TABLE,
-    primaryKeys = [GROUP_ID, SUBSCRIPTION_ID],
-    indices = [Index(SUBSCRIPTION_ID)],
-    foreignKeys = [
-        ForeignKey(
-            entity = FeedGroupEntity::class,
-            parentColumns = [FeedGroupEntity.ID],
-            childColumns = [GROUP_ID],
-            onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE,
-            deferred = true
-        ),
-
-        ForeignKey(
-            entity = SubscriptionEntity::class,
-            parentColumns = [SubscriptionEntity.SUBSCRIPTION_UID],
-            childColumns = [SUBSCRIPTION_ID],
-            onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE,
-            deferred = true
-        )
-    ]
-)
+@Entity(tableName = "feed_group_subscriptions")
 data class FeedGroupSubscriptionEntity(
-    @ColumnInfo(name = GROUP_ID)
-    var feedGroupId: Long,
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    val id: Long = 0,
 
-    @ColumnInfo(name = SUBSCRIPTION_ID)
-    var subscriptionId: Long
-) {
+    @ColumnInfo(name = "group_id")
+    val groupId: Long,
 
-    companion object {
-        const val FEED_GROUP_SUBSCRIPTION_TABLE = "feed_group_subscription_join"
-
-        const val GROUP_ID = "group_id"
-        const val SUBSCRIPTION_ID = "subscription_id"
-    }
-}
+    @ColumnInfo(name = "subscription_id")
+    val subscriptionId: Long
+)

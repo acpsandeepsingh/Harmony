@@ -1,6 +1,6 @@
 /*
- * SPDX-FileCopyrightText: 2018-2021 NewPipe contributors <https://newpipe.net>
- * SPDX-FileCopyrightText: 2025 NewPipe e.V. <https://newpipe-ev.de>
+ * SPDX-FileCopyrightText: 2024 NewPipe contributors <https://newpipe.net>
+ * SPDX-FileCopyrightText: 2024-2025 NewPipe e.V. <https://newpipe-ev.de>
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
@@ -10,36 +10,14 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
-import com.sansoft.harmony.database.BasicDAO
 import com.sansoft.harmony.database.stream.model.StreamStateEntity
 import io.reactivex.rxjava3.core.Flowable
 
 @Dao
-interface StreamStateDAO : BasicDAO<StreamStateEntity> {
+interface StreamStateDAO {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(streamState: StreamStateEntity): Long
 
-    @Query("SELECT * FROM " + StreamStateEntity.STREAM_STATE_TABLE)
-    override fun getAll(): Flowable<List<StreamStateEntity>>
-
-    @Query("DELETE FROM " + StreamStateEntity.STREAM_STATE_TABLE)
-    override fun deleteAll(): Int
-
-    override fun listByService(serviceId: Int): Flowable<List<StreamStateEntity>> {
-        throw UnsupportedOperationException()
-    }
-
-    @Query("SELECT * FROM " + StreamStateEntity.STREAM_STATE_TABLE + " WHERE " + StreamStateEntity.JOIN_STREAM_ID + " = :streamId")
-    fun getState(streamId: Long): Flowable<MutableList<StreamStateEntity>>
-
-    @Query("DELETE FROM " + StreamStateEntity.STREAM_STATE_TABLE + " WHERE " + StreamStateEntity.JOIN_STREAM_ID + " = :streamId")
-    fun deleteState(streamId: Long): Int
-
-    @Insert(onConflict = OnConflictStrategy.Companion.IGNORE)
-    fun silentInsertInternal(streamState: StreamStateEntity)
-
-    @Transaction
-    fun upsert(stream: StreamStateEntity): Long {
-        silentInsertInternal(stream)
-        return update(stream).toLong()
-    }
+    @Query("SELECT * FROM stream_states WHERE stream_id = :streamId")
+    fun getByStreamId(streamId: Long): Flowable<List<StreamStateEntity>>
 }

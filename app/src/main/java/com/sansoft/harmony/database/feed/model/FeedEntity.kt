@@ -1,50 +1,30 @@
+/*
+ * SPDX-FileCopyrightText: 2024 NewPipe contributors <https://newpipe.net>
+ * SPDX-FileCopyrightText: 2024-2025 NewPipe e.V. <https://newpipe-ev.de>
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 package com.sansoft.harmony.database.feed.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
-import com.sansoft.harmony.database.feed.model.FeedEntity.Companion.FEED_TABLE
-import com.sansoft.harmony.database.feed.model.FeedEntity.Companion.STREAM_ID
-import com.sansoft.harmony.database.feed.model.FeedEntity.Companion.SUBSCRIPTION_ID
-import com.sansoft.harmony.database.stream.model.StreamEntity
-import com.sansoft.harmony.database.subscription.SubscriptionEntity
+import androidx.room.PrimaryKey
 
-@Entity(
-    tableName = FEED_TABLE,
-    primaryKeys = [STREAM_ID, SUBSCRIPTION_ID],
-    indices = [Index(SUBSCRIPTION_ID)],
-    foreignKeys = [
-        ForeignKey(
-            entity = StreamEntity::class,
-            parentColumns = [StreamEntity.STREAM_ID],
-            childColumns = [STREAM_ID],
-            onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE,
-            deferred = true
-        ),
-        ForeignKey(
-            entity = SubscriptionEntity::class,
-            parentColumns = [SubscriptionEntity.SUBSCRIPTION_UID],
-            childColumns = [SUBSCRIPTION_ID],
-            onDelete = ForeignKey.CASCADE,
-            onUpdate = ForeignKey.CASCADE,
-            deferred = true
-        )
-    ]
-)
+@Entity(tableName = "feed")
 data class FeedEntity(
-    @ColumnInfo(name = STREAM_ID)
-    var streamId: Long,
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    val id: Long = 0,
 
-    @ColumnInfo(name = SUBSCRIPTION_ID)
-    var subscriptionId: Long
-) {
+    @ColumnInfo(name = "service_id")
+    val serviceId: Int,
 
-    companion object {
-        const val FEED_TABLE = "feed"
+    @ColumnInfo(name = "url")
+    val url: String,
 
-        const val STREAM_ID = "stream_id"
-        const val SUBSCRIPTION_ID = "subscription_id"
-    }
-}
+    @ColumnInfo(name = "title")
+    val title: String,
+
+    @ColumnInfo(name = "thumbnail_url")
+    val thumbnailUrl: String
+)

@@ -1,39 +1,21 @@
+/*
+ * SPDX-FileCopyrightText: 2024 NewPipe contributors <https://newpipe.net>
+ * SPDX-FileCopyrightText: 2024-2025 NewPipe e.V. <https://newpipe-ev.de>
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 package com.sansoft.harmony.database.feed.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.sansoft.harmony.database.feed.model.FeedGroupEntity.Companion.FEED_GROUP_TABLE
-import com.sansoft.harmony.database.feed.model.FeedGroupEntity.Companion.SORT_ORDER
-import com.sansoft.harmony.local.subscription.FeedGroupIcon
 
-@Entity(
-    tableName = FEED_GROUP_TABLE,
-    indices = [Index(SORT_ORDER)]
-)
+@Entity(tableName = "feed_groups")
 data class FeedGroupEntity(
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = ID)
-    val uid: Long,
+    @ColumnInfo(name = "id")
+    val id: Long = 0,
 
-    @ColumnInfo(name = NAME)
-    var name: String,
-
-    @ColumnInfo(name = ICON)
-    var icon: FeedGroupIcon,
-
-    @ColumnInfo(name = SORT_ORDER)
-    var sortOrder: Long = -1
-) {
-    companion object {
-        const val FEED_GROUP_TABLE = "feed_group"
-
-        const val ID = "uid"
-        const val NAME = "name"
-        const val ICON = "icon_id"
-        const val SORT_ORDER = "sort_order"
-
-        const val GROUP_ALL_ID = -1L
-    }
-}
+    @ColumnInfo(name = "name")
+    val name: String
+)
