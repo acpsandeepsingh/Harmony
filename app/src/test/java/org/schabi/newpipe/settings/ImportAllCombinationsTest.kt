@@ -1,15 +1,15 @@
-package org.schabi.newpipe.settings
+package com.sansoft.harmony.settings
 
 import android.content.SharedPreferences
+import com.sansoft.harmony.settings.export.BackupFileLocator
+import com.sansoft.harmony.settings.export.ImportExportManager
+import com.sansoft.harmony.streams.io.StoredFileHelper
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.Mockito
-import org.schabi.newpipe.settings.export.BackupFileLocator
-import org.schabi.newpipe.settings.export.ImportExportManager
-import org.schabi.newpipe.streams.io.StoredFileHelper
 import us.shandian.giga.io.FileStream
 
 class ImportAllCombinationsTest {

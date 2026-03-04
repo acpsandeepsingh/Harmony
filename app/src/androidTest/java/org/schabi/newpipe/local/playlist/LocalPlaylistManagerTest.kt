@@ -1,14 +1,14 @@
-package org.schabi.newpipe.local.playlist
+package com.sansoft.harmony.local.playlist
 
+import com.sansoft.harmony.database.AppDatabase
+import com.sansoft.harmony.database.stream.model.StreamEntity
+import com.sansoft.harmony.extractor.stream.StreamType
+import com.sansoft.harmony.testUtil.TestDatabase
+import com.sansoft.harmony.testUtil.TrampolineSchedulerRule
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.schabi.newpipe.database.AppDatabase
-import org.schabi.newpipe.database.stream.model.StreamEntity
-import org.schabi.newpipe.extractor.stream.StreamType
-import org.schabi.newpipe.testUtil.TestDatabase
-import org.schabi.newpipe.testUtil.TrampolineSchedulerRule
 
 class LocalPlaylistManagerTest {
 

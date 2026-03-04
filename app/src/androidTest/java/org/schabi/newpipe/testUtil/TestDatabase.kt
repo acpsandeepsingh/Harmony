@@ -1,10 +1,10 @@
-package org.schabi.newpipe.testUtil
+package com.sansoft.harmony.testUtil
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import com.sansoft.harmony.NewPipeDatabase
+import com.sansoft.harmony.database.AppDatabase
 import org.junit.Assert.assertSame
-import org.schabi.newpipe.NewPipeDatabase
-import org.schabi.newpipe.database.AppDatabase
 
 class TestDatabase {
     companion object {

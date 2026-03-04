@@ -1,11 +1,11 @@
-package org.schabi.newpipe
+package com.sansoft.harmony
 
 import androidx.preference.PreferenceManager
 import com.facebook.stetho.Stetho
 import com.facebook.stetho.okhttp3.StethoInterceptor
+import com.sansoft.harmony.extractor.downloader.Downloader
 import leakcanary.LeakCanary
 import okhttp3.OkHttpClient
-import org.schabi.newpipe.extractor.downloader.Downloader
 
 class DebugApp : App() {
     override fun onCreate() {

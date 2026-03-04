@@ -1,4 +1,4 @@
-package org.schabi.newpipe.streams;
+package com.sansoft.harmony.streams;
 
 import org.junit.Test;
 import org.jsoup.Jsoup;

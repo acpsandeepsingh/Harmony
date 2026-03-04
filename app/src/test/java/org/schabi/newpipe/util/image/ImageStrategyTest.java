@@ -1,14 +1,14 @@
-package org.schabi.newpipe.util.image;
+package com.sansoft.harmony.util.image;
 
 import static org.junit.Assert.assertEquals;
-import static org.schabi.newpipe.extractor.Image.HEIGHT_UNKNOWN;
-import static org.schabi.newpipe.extractor.Image.WIDTH_UNKNOWN;
-import static org.schabi.newpipe.util.image.ImageStrategy.choosePreferredImage;
-import static org.schabi.newpipe.util.image.ImageStrategy.estimatePixelCount;
+import static com.sansoft.harmony.extractor.Image.HEIGHT_UNKNOWN;
+import static com.sansoft.harmony.extractor.Image.WIDTH_UNKNOWN;
+import static com.sansoft.harmony.util.image.ImageStrategy.choosePreferredImage;
+import static com.sansoft.harmony.util.image.ImageStrategy.estimatePixelCount;
 
 import org.junit.Test;
-import org.schabi.newpipe.extractor.Image;
-import org.schabi.newpipe.extractor.Image.ResolutionLevel;
+import com.sansoft.harmony.extractor.Image;
+import com.sansoft.harmony.extractor.Image.ResolutionLevel;
 
 import java.util.List;
 

@@ -2,14 +2,14 @@ package us.shandian.giga.get;
 
 import android.util.Log;
 
-import org.schabi.newpipe.extractor.NewPipe;
-import org.schabi.newpipe.extractor.StreamingService;
-import org.schabi.newpipe.extractor.exceptions.ExtractionException;
-import org.schabi.newpipe.extractor.stream.AudioStream;
-import org.schabi.newpipe.extractor.stream.DeliveryMethod;
-import org.schabi.newpipe.extractor.stream.StreamExtractor;
-import org.schabi.newpipe.extractor.stream.SubtitlesStream;
-import org.schabi.newpipe.extractor.stream.VideoStream;
+import com.sansoft.harmony.extractor.NewPipe;
+import com.sansoft.harmony.extractor.StreamingService;
+import com.sansoft.harmony.extractor.exceptions.ExtractionException;
+import com.sansoft.harmony.extractor.stream.AudioStream;
+import com.sansoft.harmony.extractor.stream.DeliveryMethod;
+import com.sansoft.harmony.extractor.stream.StreamExtractor;
+import com.sansoft.harmony.extractor.stream.SubtitlesStream;
+import com.sansoft.harmony.extractor.stream.VideoStream;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;

@@ -1,9 +1,9 @@
-package org.schabi.newpipe.util.external_communication;
+package com.sansoft.harmony.util.external_communication;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.schabi.newpipe.util.text.TimestampExtractor;
+import com.sansoft.harmony.util.text.TimestampExtractor;
 
 import java.time.Duration;
 import java.util.Arrays;

@@ -1,10 +1,10 @@
-package org.schabi.newpipe.player.playqueue;
+package com.sansoft.harmony.player.playqueue;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.schabi.newpipe.extractor.stream.StreamInfoItem;
-import org.schabi.newpipe.extractor.stream.StreamType;
+import com.sansoft.harmony.extractor.stream.StreamInfoItem;
+import com.sansoft.harmony.extractor.stream.StreamType;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package org.schabi.newpipe.player.playqueue;
+package com.sansoft.harmony.player.playqueue;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package org.schabi.newpipe.ktx
+package com.sansoft.harmony.ktx
 
 import java.io.IOException
 import java.io.InterruptedIOException

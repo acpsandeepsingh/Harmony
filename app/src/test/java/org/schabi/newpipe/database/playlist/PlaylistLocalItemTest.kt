@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-package org.schabi.newpipe.database.playlist
+package com.sansoft.harmony.database.playlist
 
+import com.sansoft.harmony.database.playlist.model.PlaylistRemoteEntity
+import com.sansoft.harmony.local.bookmark.MergedPlaylistManager
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.schabi.newpipe.database.playlist.model.PlaylistRemoteEntity
-import org.schabi.newpipe.local.bookmark.MergedPlaylistManager
 
 class PlaylistLocalItemTest {
 

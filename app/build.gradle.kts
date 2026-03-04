@@ -4,6 +4,7 @@
  */
 
 import com.android.build.api.dsl.ApplicationExtension
+import org.gradle.api.JavaVersion
 
 plugins {
     alias(libs.plugins.android.application)
@@ -19,28 +20,17 @@ val gitWorkingBranch = providers.exec {
     commandLine("git", "rev-parse", "--abbrev-ref", "HEAD")
 }.standardOutput.asText.map { it.trim() }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
-
 kotlin {
-    compilerOptions {
-        // TODO: Drop annotation default target when it is stable
-        freeCompilerArgs.addAll(
-            "-Xannotation-default-target=param-property"
-        )
-    }
+    jvmToolchain(17)
 }
 
 configure<ApplicationExtension> {
     compileSdk = 36
-    namespace = "org.schabi.newpipe"
+    namespace = "com.sansoft.harmony"
 
     defaultConfig {
-        applicationId = "org.schabi.newpipe"
-        resValue("string", "app_name", "NewPipe")
+        applicationId = "com.sansoft.harmony"
+        resValue("string", "app_name", "Harmony")
         minSdk = 21
         targetSdk = 35
 
@@ -66,17 +56,17 @@ configure<ApplicationExtension> {
             if (normalizedWorkingBranch.isEmpty() || workingBranch in defaultBranches) {
                 // default values when branch name could not be determined or is master or dev
                 applicationIdSuffix = ".debug"
-                resValue("string", "app_name", "NewPipe Debug")
+                resValue("string", "app_name", "Harmony Debug")
             } else {
                 applicationIdSuffix = ".debug.$normalizedWorkingBranch"
-                resValue("string", "app_name", "NewPipe $workingBranch")
+                resValue("string", "app_name", "Harmony $workingBranch")
             }
         }
 
         release {
             System.getProperty("packageSuffix")?.let { suffix ->
                 applicationIdSuffix = suffix
-                resValue("string", "app_name", "NewPipe $suffix")
+                resValue("string", "app_name", "Harmony $suffix")
             }
             isMinifyEnabled = true
             isShrinkResources = true
@@ -94,9 +84,8 @@ configure<ApplicationExtension> {
     }
 
     compileOptions {
-        // Flag to enable support for the new language APIs
-        isCoreLibraryDesugaringEnabled = true
-        encoding = "utf-8"
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     sourceSets {
@@ -139,7 +128,7 @@ val ktlint by configurations.creating
 // https://checkstyle.org/#JRE_and_JDK
 tasks.withType<Checkstyle>().configureEach {
     javaLauncher = javaToolchains.launcherFor {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -204,8 +193,8 @@ afterEvaluate {
 
 sonar {
     properties {
-        property("sonar.projectKey", "TeamNewPipe_NewPipe")
-        property("sonar.organization", "teamnewpipe")
+        property("sonar.projectKey", "Sansoft_Harmony")
+        property("sonar.organization", "sansoft")
         property("sonar.host.url", "https://sonarcloud.io")
     }
 }

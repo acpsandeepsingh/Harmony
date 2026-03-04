@@ -1,8 +1,19 @@
-package org.schabi.newpipe.database
+package com.sansoft.harmony.database
 
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import com.sansoft.harmony.database.feed.dao.FeedDAO
+import com.sansoft.harmony.database.feed.model.FeedEntity
+import com.sansoft.harmony.database.feed.model.FeedGroupEntity
+import com.sansoft.harmony.database.stream.StreamWithState
+import com.sansoft.harmony.database.stream.dao.StreamDAO
+import com.sansoft.harmony.database.stream.model.StreamEntity
+import com.sansoft.harmony.database.subscription.SubscriptionDAO
+import com.sansoft.harmony.database.subscription.SubscriptionEntity
+import com.sansoft.harmony.extractor.ServiceList
+import com.sansoft.harmony.extractor.channel.ChannelInfo
+import com.sansoft.harmony.extractor.stream.StreamType
 import io.reactivex.rxjava3.core.Single
 import java.io.IOException
 import java.time.OffsetDateTime
@@ -11,17 +22,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
-import org.schabi.newpipe.database.feed.dao.FeedDAO
-import org.schabi.newpipe.database.feed.model.FeedEntity
-import org.schabi.newpipe.database.feed.model.FeedGroupEntity
-import org.schabi.newpipe.database.stream.StreamWithState
-import org.schabi.newpipe.database.stream.dao.StreamDAO
-import org.schabi.newpipe.database.stream.model.StreamEntity
-import org.schabi.newpipe.database.subscription.SubscriptionDAO
-import org.schabi.newpipe.database.subscription.SubscriptionEntity
-import org.schabi.newpipe.extractor.ServiceList
-import org.schabi.newpipe.extractor.channel.ChannelInfo
-import org.schabi.newpipe.extractor.stream.StreamType
 
 class FeedDAOTest {
     private lateinit var db: AppDatabase

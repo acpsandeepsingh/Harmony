@@ -1,11 +1,11 @@
-package org.schabi.newpipe.local.subscription.services;
+package com.sansoft.harmony.local.subscription.services;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
-import org.schabi.newpipe.extractor.subscription.SubscriptionExtractor;
-import org.schabi.newpipe.extractor.subscription.SubscriptionItem;
+import com.sansoft.harmony.extractor.subscription.SubscriptionExtractor;
+import com.sansoft.harmony.extractor.subscription.SubscriptionItem;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

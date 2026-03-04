@@ -1,8 +1,8 @@
 package us.shandian.giga.postprocessing;
 
-import org.schabi.newpipe.streams.Mp4DashReader;
-import org.schabi.newpipe.streams.Mp4FromDashWriter;
-import org.schabi.newpipe.streams.io.SharpStream;
+import com.sansoft.harmony.streams.Mp4DashReader;
+import com.sansoft.harmony.streams.Mp4FromDashWriter;
+import com.sansoft.harmony.streams.io.SharpStream;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package org.schabi.newpipe.settings;
+package com.sansoft.harmony.settings;
 
 import android.content.Intent;
 

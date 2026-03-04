@@ -1,7 +1,10 @@
-package org.schabi.newpipe.settings
+package com.sansoft.harmony.settings
 
 import android.content.SharedPreferences
 import com.grack.nanojson.JsonParser
+import com.sansoft.harmony.settings.export.BackupFileLocator
+import com.sansoft.harmony.settings.export.ImportExportManager
+import com.sansoft.harmony.streams.io.StoredFileHelper
 import java.io.File
 import java.io.ObjectInputStream
 import java.nio.file.Files
@@ -23,9 +26,6 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.withSettings
 import org.mockito.junit.MockitoJUnitRunner
-import org.schabi.newpipe.settings.export.BackupFileLocator
-import org.schabi.newpipe.settings.export.ImportExportManager
-import org.schabi.newpipe.streams.io.StoredFileHelper
 import us.shandian.giga.io.FileStream
 
 @RunWith(MockitoJUnitRunner::class)

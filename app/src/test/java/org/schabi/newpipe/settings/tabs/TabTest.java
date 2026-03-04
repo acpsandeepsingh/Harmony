@@ -1,4 +1,4 @@
-package org.schabi.newpipe.settings.tabs;
+package com.sansoft.harmony.settings.tabs;
 
 import org.junit.Test;
 

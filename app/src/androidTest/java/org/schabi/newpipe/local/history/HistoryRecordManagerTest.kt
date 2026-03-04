@@ -1,6 +1,10 @@
-package org.schabi.newpipe.local.history
+package com.sansoft.harmony.local.history
 
 import androidx.test.core.app.ApplicationProvider
+import com.sansoft.harmony.database.AppDatabase
+import com.sansoft.harmony.database.history.model.SearchHistoryEntry
+import com.sansoft.harmony.testUtil.TestDatabase
+import com.sansoft.harmony.testUtil.TrampolineSchedulerRule
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -10,10 +14,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.schabi.newpipe.database.AppDatabase
-import org.schabi.newpipe.database.history.model.SearchHistoryEntry
-import org.schabi.newpipe.testUtil.TestDatabase
-import org.schabi.newpipe.testUtil.TrampolineSchedulerRule
 
 class HistoryRecordManagerTest {
 

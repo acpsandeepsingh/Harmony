@@ -1,4 +1,4 @@
-package org.schabi.newpipe.error
+package com.sansoft.harmony.error
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

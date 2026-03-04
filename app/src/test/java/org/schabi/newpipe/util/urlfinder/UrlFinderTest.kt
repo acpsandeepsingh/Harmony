@@ -1,4 +1,4 @@
-package org.schabi.newpipe.util.urlfinder
+package com.sansoft.harmony.util.urlfinder
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

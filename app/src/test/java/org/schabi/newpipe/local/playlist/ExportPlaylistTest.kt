@@ -3,17 +3,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-package org.schabi.newpipe.local.playlist
+package com.sansoft.harmony.local.playlist
 
 import android.content.Context
+import com.sansoft.harmony.database.playlist.PlaylistStreamEntry
+import com.sansoft.harmony.database.stream.model.StreamEntity
+import com.sansoft.harmony.extractor.stream.StreamType
+import com.sansoft.harmony.local.playlist.PlayListShareMode.JUST_URLS
+import com.sansoft.harmony.local.playlist.PlayListShareMode.YOUTUBE_TEMP_PLAYLIST
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito.mock
-import org.schabi.newpipe.database.playlist.PlaylistStreamEntry
-import org.schabi.newpipe.database.stream.model.StreamEntity
-import org.schabi.newpipe.extractor.stream.StreamType
-import org.schabi.newpipe.local.playlist.PlayListShareMode.JUST_URLS
-import org.schabi.newpipe.local.playlist.PlayListShareMode.YOUTUBE_TEMP_PLAYLIST
 
 class ExportPlaylistTest {
 
