@@ -46,10 +46,10 @@ import com.sansoft.harmony.databinding.InstanceSpinnerLayoutBinding;
 import com.sansoft.harmony.databinding.ToolbarLayoutBinding;
 import com.sansoft.harmony.error.ErrorUtil;
 import com.sansoft.harmony.extractor.NewPipe;
+import com.sansoft.harmony.extractor.ServiceList;
 import com.sansoft.harmony.extractor.StreamingService;
 import com.sansoft.harmony.extractor.comments.CommentsInfoItem;
 import com.sansoft.harmony.extractor.exceptions.ExtractionException;
-import com.sansoft.harmony.extractor.services.peertube.PeertubeInstance;
 import com.sansoft.harmony.fragments.BackPressable;
 import com.sansoft.harmony.fragments.MainFragment;
 import com.sansoft.harmony.fragments.detail.VideoDetailFragment;
@@ -67,7 +67,6 @@ import com.sansoft.harmony.util.DeviceUtils;
 import com.sansoft.harmony.util.KioskTranslator;
 import com.sansoft.harmony.util.Localization;
 import com.sansoft.harmony.util.NavigationHelper;
-import com.sansoft.harmony.util.PeertubeHelper;
 import com.sansoft.harmony.util.PermissionHelper;
 import com.sansoft.harmony.util.ReleaseVersionUtil;
 import com.sansoft.harmony.util.SerializedCache;
@@ -102,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int ITEM_ID_BOOKMARKS = -3;
     private static final int ITEM_ID_DOWNLOADS = -4;
     private static final int ITEM_ID_HISTORY = -5;
-    private static final int ITEM_ID_SETTINGS = 0;
 
     private static final int ORDER = 0;
     public static final String KEY_IS_IN_BACKGROUND = "is_in_background";
@@ -233,8 +231,7 @@ public class MainActivity extends AppCompatActivity {
                 .setIcon(R.drawable.ic_history);
 
         //Kiosks
-        final int currentServiceId = ServiceHelper.getSelectedServiceId(this);
-        final StreamingService service = NewPipe.getService(currentServiceId);
+        final StreamingService service = ServiceList.YouTube;
 
         int kioskMenuItemId = 0;
 
@@ -257,8 +254,6 @@ public class MainActivity extends AppCompatActivity {
             } catch (final Exception e) {
                 ErrorUtil.showUiErrorSnackbar(this, "Selecting drawer kiosk", e);
             }
-        } else if (groupId == R.id.menu_options_about_group) {
-            optionsAboutSelected(item);
         } else {
             return false;
         }
@@ -288,7 +283,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void kioskSelected(final MenuItem item) throws ExtractionException {
-        final StreamingService currentService = ServiceHelper.getSelectedService(this);
+        final StreamingService currentService = ServiceList.YouTube;
         int kioskMenuItemId = 0;
         for (final String kioskId : currentService.getKioskList().getAvailableKiosks()) {
             if (kioskMenuItemId == item.getItemId()) {
@@ -297,14 +292,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
             kioskMenuItemId++;
-        }
-    }
-
-    private void optionsAboutSelected(final MenuItem item) {
-        switch (item.getItemId()) {
-            case ITEM_ID_SETTINGS:
-                NavigationHelper.openSettings(this);
-                break;
         }
     }
 
@@ -340,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
 
         mainBinding.getRoot().closeDrawer(GravityCompat.START, false);
         try {
-            final int selectedServiceId = ServiceHelper.getSelectedServiceId(this);
+            final int selectedServiceId = ServiceList.YouTube.getServiceId();
             final String selectedServiceName = NewPipe.getService(selectedServiceId)
                     .getServiceInfo().getName();
             drawerHeaderBinding.drawerHeaderServiceView.setText(selectedServiceName);

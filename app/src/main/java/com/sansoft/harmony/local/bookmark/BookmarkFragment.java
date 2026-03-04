@@ -12,11 +12,13 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +36,8 @@ import com.sansoft.harmony.database.playlist.model.PlaylistRemoteEntity;
 import com.sansoft.harmony.databinding.DialogEditTextBinding;
 import com.sansoft.harmony.error.ErrorInfo;
 import com.sansoft.harmony.error.UserAction;
+import com.sansoft.harmony.fragments.favorites.FavoritesViewModel;
+import com.sansoft.harmony.fragments.favorites.ViewModelFactory;
 import com.sansoft.harmony.local.BaseLocalListFragment;
 import com.sansoft.harmony.local.holder.LocalBookmarkPlaylistItemHolder;
 import com.sansoft.harmony.local.holder.RemoteBookmarkPlaylistItemHolder;
@@ -41,8 +45,6 @@ import com.sansoft.harmony.local.playlist.LocalPlaylistManager;
 import com.sansoft.harmony.local.playlist.RemotePlaylistManager;
 import com.sansoft.harmony.util.NavigationHelper;
 import com.sansoft.harmony.util.OnClickGesture;
-import com.sansoft.harmony.util.debounce.DebounceSavable;
-import com.sansoft.harmony.util.debounce.DebounceSaver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +54,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 
-public final class BookmarkFragment extends BaseLocalListFragment<List<PlaylistLocalItem>, Void>
-        implements DebounceSavable {
+public final class BookmarkFragment extends BaseLocalListFragment<List<PlaylistLocalItem>, Void> {
 
     private static final int MINIMUM_INITIAL_DRAG_VELOCITY = 12;
     @State
@@ -64,15 +65,14 @@ public final class BookmarkFragment extends BaseLocalListFragment<List<PlaylistL
     private LocalPlaylistManager localPlaylistManager;
     private RemotePlaylistManager remotePlaylistManager;
     private ItemTouchHelper itemTouchHelper;
+    private FavoritesViewModel favoritesViewModel;
 
     /* Have the bookmarked playlists been fully loaded from db */
     private AtomicBoolean isLoadingComplete;
 
-    /* Gives enough time to avoid interrupting user sorting operations */
-    @Nullable
-    private DebounceSaver debounceSaver;
-
     private List<Pair<Long, LocalItem.LocalItemType>> deletedItems;
+
+    private TextView favoritesTitle;
 
     ///////////////////////////////////////////////////////////////////////////
     // Fragment LifeCycle - Creation
@@ -90,7 +90,6 @@ public final class BookmarkFragment extends BaseLocalListFragment<List<PlaylistL
         disposables = new CompositeDisposable();
 
         isLoadingComplete = new AtomicBoolean();
-        debounceSaver = new DebounceSaver(3000, this);
 
         deletedItems = new ArrayList<>();
     }
@@ -104,7 +103,11 @@ public final class BookmarkFragment extends BaseLocalListFragment<List<PlaylistL
         if (!useAsFrontPage) {
             setTitle(activity.getString(R.string.tab_bookmarks));
         }
-        return inflater.inflate(R.layout.fragment_bookmarks, container, false);
+
+        final View view = inflater.inflate(R.layout.fragment_bookmarks, container, false);
+        favoritesTitle = view.findViewById(R.id.favorites_title);
+
+        return view;
     }
 
     @Override
@@ -180,11 +183,19 @@ public final class BookmarkFragment extends BaseLocalListFragment<List<PlaylistL
     public void startLoading(final boolean forceLoad) {
         super.startLoading(forceLoad);
 
-        if (debounceSaver != null) {
-            disposables.add(debounceSaver.getDebouncedSaver());
-            debounceSaver.setNoChangesToSave();
-        }
         isLoadingComplete.set(false);
+
+        final AppDatabase database = NewPipeDatabase.getInstance(activity);
+        final ViewModelFactory factory = new ViewModelFactory(database);
+        favoritesViewModel = new ViewModelProvider(this, factory).get(FavoritesViewModel.class);
+
+        favoritesViewModel.getFavorites().observe(getViewLifecycleOwner(), favoriteSongs -> {
+            if (favoriteSongs.isEmpty()) {
+                favoritesTitle.setVisibility(View.GONE);
+            } else {
+                favoritesTitle.setVisibility(View.VISIBLE);
+            }
+        });
 
         getMergedOrderedPlaylists(localPlaylistManager, remotePlaylistManager)
                 .onBackpressureLatest()
@@ -200,9 +211,6 @@ public final class BookmarkFragment extends BaseLocalListFragment<List<PlaylistL
     public void onPause() {
         super.onPause();
         itemsListState = itemsList.getLayoutManager().onSaveInstanceState();
-
-        // Save on exit
-        saveImmediate();
     }
 
     @Override
@@ -223,14 +231,10 @@ public final class BookmarkFragment extends BaseLocalListFragment<List<PlaylistL
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (debounceSaver != null) {
-            debounceSaver.getDebouncedSaveSignal().onComplete();
-        }
         if (disposables != null) {
             disposables.dispose();
         }
 
-        debounceSaver = null;
         disposables = null;
         localPlaylistManager = null;
         remotePlaylistManager = null;
@@ -260,10 +264,9 @@ public final class BookmarkFragment extends BaseLocalListFragment<List<PlaylistL
 
             @Override
             public void onNext(final List<PlaylistLocalItem> subscriptions) {
-                if (debounceSaver == null || !debounceSaver.getIsModified()) {
-                    handleResult(subscriptions);
-                    isLoadingComplete.set(true);
-                }
+                handleResult(subscriptions);
+                isLoadingComplete.set(true);
+
                 if (databaseSubscription != null) {
                     databaseSubscription.request(1);
                 }
@@ -348,73 +351,6 @@ public final class BookmarkFragment extends BaseLocalListFragment<List<PlaylistL
             deletedItems.add(new Pair<>(item.getUid(),
                     LocalItem.LocalItemType.PLAYLIST_REMOTE_ITEM));
         }
-
-        if (debounceSaver != null) {
-            debounceSaver.setHasChangesToSave();
-            saveImmediate();
-        }
-    }
-
-    @Override
-    public void saveImmediate() {
-        if (itemListAdapter == null) {
-            return;
-        }
-
-        // List must be loaded and modified in order to save
-        if (isLoadingComplete == null || debounceSaver == null
-                || !isLoadingComplete.get() || !debounceSaver.getIsModified()) {
-            return;
-        }
-
-        final List<LocalItem> items = itemListAdapter.getItemsList();
-        final List<PlaylistMetadataEntry> localItemsUpdate = new ArrayList<>();
-        final List<Long> localItemsDeleteUid = new ArrayList<>();
-        final List<PlaylistRemoteEntity> remoteItemsUpdate = new ArrayList<>();
-        final List<Long> remoteItemsDeleteUid = new ArrayList<>();
-
-        // Calculate display index
-        for (int i = 0; i < items.size(); i++) {
-            final LocalItem item = items.get(i);
-
-            if (item instanceof PlaylistMetadataEntry
-                    && ((PlaylistMetadataEntry) item).getDisplayIndex() != i) {
-                ((PlaylistMetadataEntry) item).setDisplayIndex((long) i);
-                localItemsUpdate.add((PlaylistMetadataEntry) item);
-            } else if (item instanceof PlaylistRemoteEntity
-                    && ((PlaylistRemoteEntity) item).getDisplayIndex() != i) {
-                ((PlaylistRemoteEntity) item).setDisplayIndex((long) i);
-                remoteItemsUpdate.add((PlaylistRemoteEntity) item);
-            }
-        }
-
-        // Find deleted items
-        for (final Pair<Long, LocalItem.LocalItemType> item : deletedItems) {
-            if (item.second.equals(LocalItem.LocalItemType.PLAYLIST_LOCAL_ITEM)) {
-                localItemsDeleteUid.add(item.first);
-            } else if (item.second.equals(LocalItem.LocalItemType.PLAYLIST_REMOTE_ITEM)) {
-                remoteItemsDeleteUid.add(item.first);
-            }
-        }
-
-        deletedItems.clear();
-
-        // 1. Update local playlists
-        // 2. Update remote playlists
-        // 3. Set NoChangesToSave
-        disposables.add(localPlaylistManager.updatePlaylists(localItemsUpdate, localItemsDeleteUid)
-                .mergeWith(remotePlaylistManager.updatePlaylists(
-                        remoteItemsUpdate, remoteItemsDeleteUid))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(() -> {
-                            if (debounceSaver != null) {
-                                debounceSaver.setNoChangesToSave();
-                            }
-                        },
-                        throwable -> showError(new ErrorInfo(throwable,
-                                UserAction.REQUESTED_BOOKMARK, "Saving playlist"))
-                ));
-
     }
 
     private ItemTouchHelper.SimpleCallback getItemTouchCallback() {
@@ -460,9 +396,6 @@ public final class BookmarkFragment extends BaseLocalListFragment<List<PlaylistL
                 final int sourceIndex = source.getBindingAdapterPosition();
                 final int targetIndex = target.getBindingAdapterPosition();
                 final boolean isSwapped = itemListAdapter.swapItems(sourceIndex, targetIndex);
-                if (isSwapped && debounceSaver != null) {
-                    debounceSaver.setHasChangesToSave();
-                }
                 return isSwapped;
             }
 

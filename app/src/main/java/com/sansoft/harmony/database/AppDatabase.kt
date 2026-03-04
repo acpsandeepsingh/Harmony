@@ -9,6 +9,8 @@ package com.sansoft.harmony.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.sansoft.harmony.database.favorite.dao.FavoriteSongDAO
+import com.sansoft.harmony.database.favorite.model.FavoriteSong
 import com.sansoft.harmony.database.feed.dao.FeedDAO
 import com.sansoft.harmony.database.feed.dao.FeedGroupDAO
 import com.sansoft.harmony.database.feed.model.FeedEntity
@@ -34,7 +36,7 @@ import com.sansoft.harmony.database.subscription.SubscriptionEntity
 
 @TypeConverters(Converters::class)
 @Database(
-    version = Migrations.DB_VER_9,
+    version = Migrations.DB_VER_10,
     entities = [
         SubscriptionEntity::class,
         SearchHistoryEntry::class,
@@ -47,7 +49,8 @@ import com.sansoft.harmony.database.subscription.SubscriptionEntity
         FeedEntity::class,
         FeedGroupEntity::class,
         FeedGroupSubscriptionEntity::class,
-        FeedLastUpdatedEntity::class
+        FeedLastUpdatedEntity::class,
+        FavoriteSong::class
     ]
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -61,6 +64,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun streamHistoryDAO(): StreamHistoryDAO
     abstract fun streamStateDAO(): StreamStateDAO
     abstract fun subscriptionDAO(): SubscriptionDAO
+    abstract fun favoriteSongDAO(): FavoriteSongDAO
 
     companion object {
         const val DATABASE_NAME: String = "newpipe.db"

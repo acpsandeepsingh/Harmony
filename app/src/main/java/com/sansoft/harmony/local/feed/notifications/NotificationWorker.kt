@@ -95,8 +95,7 @@ class NotificationWorker(
         private val TAG = NotificationWorker::class.java.simpleName
         private const val WORK_TAG = App.PACKAGE_NAME + "_streams_notifications"
 
-        private fun areNotificationsEnabled(context: Context) = NotificationHelper.areNewStreamsNotificationsEnabled(context) &&
-            NotificationHelper.areNotificationsEnabledOnDevice(context)
+        private fun areNotificationsEnabled(context: Context) = false
 
         /**
          * Schedules a task for the [NotificationWorker]
@@ -105,11 +104,7 @@ class NotificationWorker(
          */
         @JvmStatic
         fun initialize(context: Context) {
-            if (areNotificationsEnabled(context)) {
-                schedule(context)
-            } else {
-                cancel(context)
-            }
+            cancel(context)
         }
 
         /**
@@ -119,47 +114,18 @@ class NotificationWorker(
          * by replacing the previously used worker.
          */
         fun schedule(context: Context, options: ScheduleOptions, force: Boolean = false) {
-            val constraints = Constraints.Builder()
-                .setRequiredNetworkType(
-                    if (options.isRequireNonMeteredNetwork) {
-                        NetworkType.UNMETERED
-                    } else {
-                        NetworkType.CONNECTED
-                    }
-                ).build()
-
-            val request = PeriodicWorkRequest.Builder(
-                NotificationWorker::class.java,
-                options.interval,
-                TimeUnit.MILLISECONDS
-            ).setConstraints(constraints)
-                .addTag(WORK_TAG)
-                .build()
-
-            WorkManager.getInstance(context)
-                .enqueueUniquePeriodicWork(
-                    WORK_TAG,
-                    if (force) {
-                        ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE
-                    } else {
-                        ExistingPeriodicWorkPolicy.KEEP
-                    },
-                    request
-                )
+            cancel(context)
         }
 
         @JvmStatic
-        fun schedule(context: Context) = schedule(context, ScheduleOptions.from(context))
+        fun schedule(context: Context) = cancel(context)
 
         /**
          * Check for new streams immediately
          */
         @JvmStatic
         fun runNow(context: Context) {
-            val request = OneTimeWorkRequestBuilder<NotificationWorker>()
-                .addTag(WORK_TAG)
-                .build()
-            WorkManager.getInstance(context).enqueue(request)
+            cancel(context)
         }
 
         /**
