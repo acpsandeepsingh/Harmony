@@ -67,6 +67,8 @@ If you intend to add a new service, please get in touch with us first! Our [docs
 
 ## Description
 
+Harmony is a fork of NewPipe. Licensed under GPLv3.
+
 NewPipe works by fetching the required data from the official API (e.g. PeerTube) of the service you're using. If the official API is restricted (e.g. YouTube) for our purposes, or is proprietary, the app parses the website or uses an internal API instead. This means that you don't need an account on any service to use NewPipe.
 
 Also, since they are free and open source software, neither the app nor the Extractor use any proprietary libraries or frameworks, such as Google Play Services. This means you can use NewPipe on devices or custom ROMs that do not have Google apps installed.

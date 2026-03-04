@@ -245,11 +245,6 @@ public class MainActivity extends AppCompatActivity {
                     .setIcon(KioskTranslator.getKioskIcon(ks));
             kioskMenuItemId++;
         }
-
-        //Settings
-        drawerLayoutBinding.navigation.getMenu()
-                .add(R.id.menu_options_about_group, ITEM_ID_SETTINGS, ORDER, R.string.settings)
-                .setIcon(R.drawable.ic_settings);
     }
 
     private boolean drawerItemSelected(final MenuItem item) {
