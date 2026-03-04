@@ -28,7 +28,10 @@ data class PlaylistEntity @JvmOverloads constructor(
     var thumbnailStreamId: Long,
 
     @ColumnInfo(name = PLAYLIST_DISPLAY_INDEX)
-    var displayIndex: Long
+    var displayIndex: Long,
+
+    @ColumnInfo(name = FIREBASE_ID)
+    var firebaseId: String? = null
 ) {
 
     @Ignore
@@ -50,5 +53,6 @@ data class PlaylistEntity @JvmOverloads constructor(
         const val PLAYLIST_DISPLAY_INDEX = "display_index"
         const val PLAYLIST_THUMBNAIL_PERMANENT = "is_thumbnail_permanent"
         const val PLAYLIST_THUMBNAIL_STREAM_ID = "thumbnail_stream_id"
+        const val FIREBASE_ID = "firebase_id"
     }
 }

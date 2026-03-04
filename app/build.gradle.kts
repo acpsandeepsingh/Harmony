@@ -4,12 +4,10 @@
  */
 
 import com.android.build.api.dsl.ApplicationExtension
-import org.gradle.api.JavaVersion
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.jetbrains.kotlin.kapt)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.jetbrains.kotlin.parcelize)
     alias(libs.plugins.sonarqube)
@@ -20,8 +18,19 @@ val gitWorkingBranch = providers.exec {
     commandLine("git", "rev-parse", "--abbrev-ref", "HEAD")
 }.standardOutput.asText.map { it.trim() }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
 kotlin {
-    jvmToolchain(17)
+    compilerOptions {
+        // TODO: Drop annotation default target when it is stable
+        freeCompilerArgs.addAll(
+            "-Xannotation-default-target=param-property"
+        )
+    }
 }
 
 configure<ApplicationExtension> {
@@ -84,8 +93,9 @@ configure<ApplicationExtension> {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        // Flag to enable support for the new language APIs
+        isCoreLibraryDesugaringEnabled = true
+        encoding = "utf-8"
     }
 
     sourceSets {
@@ -128,7 +138,7 @@ val ktlint by configurations.creating
 // https://checkstyle.org/#JRE_and_JDK
 tasks.withType<Checkstyle>().configureEach {
     javaLauncher = javaToolchains.launcherFor {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -237,8 +247,6 @@ dependencies {
 
     /** Third-party libraries **/
     implementation(libs.livefront.bridge)
-    implementation(libs.evernote.statesaver.core)
-    kapt(libs.evernote.statesaver.compiler)
 
     // HTML parser
     implementation(libs.jsoup)

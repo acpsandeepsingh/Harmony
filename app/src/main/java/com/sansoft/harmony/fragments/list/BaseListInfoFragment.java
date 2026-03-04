@@ -125,7 +125,7 @@ public abstract class BaseListInfoFragment<I extends InfoItem, L extends ListInf
 
     /**
      * Implement the logic to load the info from the network.<br/>
-     * You can use the default implementations from {@link com.sansoft.harmony.util.ExtractorHelper}.
+     * You can use the default implementations from ExtractorHelper.
      *
      * @param forceLoad allow or disallow the result to come from the cache
      * @return Rx {@link Single} containing the {@link ListInfo}

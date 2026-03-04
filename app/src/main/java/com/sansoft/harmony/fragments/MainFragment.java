@@ -8,11 +8,11 @@ import static com.google.android.material.tabs.TabLayout.INDICATOR_GRAVITY_BOTTO
 import static com.google.android.material.tabs.TabLayout.INDICATOR_GRAVITY_TOP;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,9 +32,12 @@ import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.sansoft.harmony.BaseFragment;
 import com.sansoft.harmony.R;
+import com.sansoft.harmony.activities.LoginActivity;
+import com.sansoft.harmony.activities.YoutubeActivity;
 import com.sansoft.harmony.databinding.FragmentMainBinding;
 import com.sansoft.harmony.error.ErrorInfo;
 import com.sansoft.harmony.error.ErrorUtil;
@@ -65,9 +68,7 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
     private boolean mainTabsPositionBottom;
     private String mainTabsPositionKey;
 
-    /*//////////////////////////////////////////////////////////////////////////
-    // Fragment's LifeCycle
-    //////////////////////////////////////////////////////////////////////////*/
+    private FirebaseAuth firebaseAuth;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -75,10 +76,6 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
         setHasOptionsMenu(true);
         tabsManager = TabsManager.getManager(activity);
         tabsManager.setSavedTabsListener(() -> {
-            if (DEBUG) {
-                Log.d(TAG, "TabsManager.SavedTabsChangeListener: "
-                        + "onTabsChanged called, isResumed = " + isResumed());
-            }
             if (isResumed()) {
                 setupTabs();
             } else {
@@ -91,6 +88,8 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
         youtubeRestrictedModeEnabled = prefs.getBoolean(youtubeRestrictedModeEnabledKey, false);
         mainTabsPositionKey = getString(R.string.main_tabs_position_key);
         mainTabsPositionBottom = prefs.getBoolean(mainTabsPositionKey, false);
+
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -129,6 +128,8 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
             mainTabsPositionBottom = newMainTabsPosition;
             updateTabLayoutPosition();
         }
+
+        activity.invalidateOptionsMenu();
     }
 
     @Override
@@ -147,29 +148,34 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
         binding = null;
     }
 
-    /*//////////////////////////////////////////////////////////////////////////
-    // Menu
-    //////////////////////////////////////////////////////////////////////////*/
-
     @Override
     public void onCreateOptionsMenu(@NonNull final Menu menu,
                                     @NonNull final MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        if (DEBUG) {
-            Log.d(TAG, "onCreateOptionsMenu() called with: "
-                    + "menu = [" + menu + "], inflater = [" + inflater + "]");
-        }
         inflater.inflate(R.menu.menu_main_fragment, menu);
 
         final ActionBar supportActionBar = activity.getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(false);
         }
+
+        final FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        final MenuItem loginItem = menu.findItem(R.id.action_login);
+        final MenuItem logoutItem = menu.findItem(R.id.action_logout);
+
+        if (currentUser != null) {
+            loginItem.setVisible(false);
+            logoutItem.setVisible(true);
+        } else {
+            loginItem.setVisible(true);
+            logoutItem.setVisible(false);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        if (item.getItemId() == R.id.action_search) {
+        final int itemId = item.getItemId();
+        if (itemId == R.id.action_search) {
             try {
                 NavigationHelper.openSearchFragment(getFM(),
                         ServiceHelper.getSelectedServiceId(activity), "");
@@ -177,13 +183,19 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
                 ErrorUtil.showUiErrorSnackbar(this, "Opening search fragment", e);
             }
             return true;
+        } else if (itemId == R.id.action_login) {
+            startActivity(new Intent(activity, LoginActivity.class));
+            return true;
+        } else if (itemId == R.id.action_logout) {
+            firebaseAuth.signOut();
+            activity.invalidateOptionsMenu();
+            return true;
+        } else if (itemId == R.id.action_youtube) {
+            startActivity(new Intent(activity, YoutubeActivity.class));
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
-    /*//////////////////////////////////////////////////////////////////////////
-    // Tabs
-    //////////////////////////////////////////////////////////////////////////*/
 
     private void setupTabs() {
         tabsList.clear();
@@ -229,7 +241,6 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
         final ViewPager viewPager = binding.pager;
         final boolean bottom = mainTabsPositionBottom;
 
-        // change layout params to make the tab layout appear either at the top or at the bottom
         final var tabParams = (RelativeLayout.LayoutParams) tabLayout.getLayoutParams();
         final var pagerParams = (RelativeLayout.LayoutParams) viewPager.getLayoutParams();
 
@@ -243,8 +254,6 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
         tabLayout.setLayoutParams(tabParams);
         viewPager.setLayoutParams(pagerParams);
 
-        // change the background and icon color of the tab layout:
-        // service-colored at the top, app-background-colored at the bottom
         tabLayout.setBackgroundColor(ThemeHelper.resolveColorFromAttr(requireContext(),
                 bottom ? android.R.attr.windowBackground : R.attr.colorPrimary));
 
@@ -258,9 +267,6 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
 
     @Override
     public void onTabSelected(final TabLayout.Tab selectedTab) {
-        if (DEBUG) {
-            Log.d(TAG, "onTabSelected() called with: selectedTab = [" + selectedTab + "]");
-        }
         updateTitleForTab(selectedTab.getPosition());
     }
 
@@ -269,9 +275,6 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
 
     @Override
     public void onTabReselected(final TabLayout.Tab tab) {
-        if (DEBUG) {
-            Log.d(TAG, "onTabReselected() called with: tab = [" + tab + "]");
-        }
         updateTitleForTab(tab.getPosition());
     }
 
@@ -279,13 +282,6 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
             extends FragmentStatePagerAdapterMenuWorkaround {
         private final Context context;
         private final List<Tab> internalTabsList;
-        /**
-         * Keep reference to LocalPlaylistFragments, because their data can be modified by the user
-         * during runtime and changes are not committed immediately. However, in some cases,
-         * the changes need to be committed immediately by calling
-         * {@link LocalPlaylistFragment#saveImmediate()}.
-         * The fragments are removed when {@link LocalPlaylistFragment#onDestroy()} is called.
-         */
         private final List<LocalPlaylistFragment> localPlaylistFragments = new ArrayList<>();
 
         private SelectedTabsPagerAdapter(final Context context,
@@ -326,8 +322,6 @@ public class MainFragment extends BaseFragment implements TabLayout.OnTabSelecte
 
         @Override
         public int getItemPosition(@NonNull final Object object) {
-            // Causes adapter to reload all Fragments when
-            // notifyDataSetChanged is called
             return POSITION_NONE;
         }
 

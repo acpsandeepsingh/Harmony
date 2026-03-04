@@ -8,20 +8,14 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,7 +36,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.sansoft.harmony.databinding.ActivityMainBinding;
 import com.sansoft.harmony.databinding.DrawerHeaderBinding;
 import com.sansoft.harmony.databinding.DrawerLayoutBinding;
-import com.sansoft.harmony.databinding.InstanceSpinnerLayoutBinding;
 import com.sansoft.harmony.databinding.ToolbarLayoutBinding;
 import com.sansoft.harmony.error.ErrorUtil;
 import com.sansoft.harmony.extractor.NewPipe;
@@ -78,7 +71,6 @@ import com.sansoft.harmony.views.FocusOverlayView;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
