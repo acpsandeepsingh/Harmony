@@ -32,7 +32,7 @@ import com.sansoft.harmony.database.stream.dao.StreamStateDAO
 import com.sansoft.harmony.database.stream.model.StreamEntity
 import com.sansoft.harmony.database.stream.model.StreamStateEntity
 import com.sansoft.harmony.database.subscription.SubscriptionDAO
-import com.sansoft.harmony.database.subscription.SubscriptionEntity
+import com.sansoft.harmony.database.subscription.model.SubscriptionEntity
 
 @TypeConverters(Converters::class)
 @Database(
