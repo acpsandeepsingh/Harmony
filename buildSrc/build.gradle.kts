@@ -4,9 +4,5 @@
  */
 
 plugins {
-    `kotlin-dsl`
-}
-
-repositories {
-    gradlePluginPortal()
+    `java-library`
 }
