@@ -28,3 +28,15 @@ Once the Java toolchain is configured, you can build the APK using the following
 ```
 
 This will create a debug APK in the `app/build/outputs/apk/debug` directory.
+
+## 3. Build APK in GitHub Actions
+
+A GitHub Actions workflow is available at `.github/workflows/build-release-apk.yml`.
+
+It runs on every push, pull request, and manual trigger (`workflow_dispatch`) to:
+
+- Build debug APK (`assembleDebug`)
+- Build release APK (`assembleRelease`)
+- Upload both APK files as workflow artifacts
+
+You can download generated APK files from the **Artifacts** section of the workflow run in GitHub.
