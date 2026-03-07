@@ -1,6 +1,8 @@
 package com.sansoft.harmony.ui.home;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -17,8 +19,13 @@ import com.sansoft.harmony.repository.VideoRepository;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class HomeFragment extends Fragment {
+    private final ExecutorService backgroundExecutor = Executors.newSingleThreadExecutor();
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+
     @Nullable
     private VideoRepository videoRepository;
     @Nullable
@@ -39,9 +46,15 @@ public class HomeFragment extends Fragment {
 
         final VideoAdapter adapter = new VideoAdapter(this::playVideo);
         recyclerView.setAdapter(adapter);
-        adapter.submitItems(loadVideos());
+        loadVideosAsync(adapter);
 
         return recyclerView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        backgroundExecutor.shutdownNow();
     }
 
     public void bindDependencies(@NonNull final VideoRepository repository,
@@ -58,6 +71,18 @@ public class HomeFragment extends Fragment {
             return Collections.emptyList();
         }
         return videoRepository.loadVideos();
+    }
+
+    private void loadVideosAsync(@NonNull final VideoAdapter adapter) {
+        backgroundExecutor.execute(() -> {
+            final List<VideoItem> items = loadVideos();
+            mainHandler.post(() -> {
+                if (!isAdded()) {
+                    return;
+                }
+                adapter.submitItems(items);
+            });
+        });
     }
 
     private void playVideo(@NonNull final VideoItem item) {
