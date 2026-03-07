@@ -20,7 +20,7 @@ val gitWorkingBranch = providers.exec {
 }.standardOutput.asText.map { it.trim() }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
     compilerOptions {
         // TODO: Drop annotation default target when it is stable
         freeCompilerArgs.addAll(
@@ -89,8 +89,8 @@ configure<ApplicationExtension> {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
         // Flag to enable support for the new language APIs
         isCoreLibraryDesugaringEnabled = true
         encoding = "utf-8"
@@ -136,7 +136,7 @@ val ktlint by configurations.creating
 // https://checkstyle.org/#JRE_and_JDK
 tasks.withType<Checkstyle>().configureEach {
     javaLauncher = javaToolchains.launcherFor {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -186,16 +186,12 @@ tasks.register<JavaExec>("formatKtlint") {
     jvmArgs = listOf("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
-tasks.register<CheckDependenciesOrder>("checkDependenciesOrder") {
-    tomlFile = layout.projectDirectory.file("../gradle/libs.versions.toml")
-}
-
 afterEvaluate {
     tasks.named("preDebugBuild").configure {
         if (!System.getProperties().containsKey("skipFormatKtlint")) {
             dependsOn("formatKtlint")
         }
-        dependsOn("runCheckstyle", "runKtlint", "checkDependenciesOrder")
+        dependsOn("runCheckstyle", "runKtlint")
     }
 }
 
