@@ -19,9 +19,27 @@ pluginManagement {
 }
 ```
 
-## 2. Build the APK
+## 2. Configure Android SDK Path
 
-Once the Java toolchain is configured, you can build the APK using the following command:
+The Android Gradle plugin also requires a configured Android SDK path.
+
+1. Copy the template:
+
+```bash
+cp local.properties.example local.properties
+```
+
+2. Edit `local.properties` and set:
+
+```properties
+sdk.dir=/absolute/path/to/Android/Sdk
+```
+
+Without this file (or a valid `ANDROID_HOME`/`ANDROID_SDK_ROOT`), Gradle fails with `SDK location not found`.
+
+## 3. Build the APK
+
+Once Java and SDK are configured, build the APK using:
 
 ```bash
 ./gradlew assembleDebug
@@ -29,7 +47,7 @@ Once the Java toolchain is configured, you can build the APK using the following
 
 This will create a debug APK in the `app/build/outputs/apk/debug` directory.
 
-## 3. Build APK in GitHub Actions
+## 4. Build APK in GitHub Actions
 
 A GitHub Actions workflow is available at `.github/workflows/build-release-apk.yml`.
 
