@@ -15,21 +15,31 @@ The project is a standard Android application with a few key directories:
 
 ## Build Process
 
-The project is built using Gradle. To build the project, you can use the following command:
+The project is built using Gradle and requires a local Android SDK installation.
+
+1. Copy the example file and set your SDK path:
+
+```bash
+cp local.properties.example local.properties
+```
+
+Then edit `local.properties` and set `sdk.dir` to your Android SDK directory.
+
+2. Build a debug APK:
 
 ```bash
 ./gradlew assembleDebug
 ```
 
-This will create a debug APK in the `app/build/outputs/apk/debug` directory.
+This creates a debug APK in `app/build/outputs/apk/debug`.
 
-To build a release APK, you can use the following command:
+3. Build a release APK:
 
 ```bash
 ./gradlew assembleRelease
 ```
 
-This will create a release APK in the `app/build/outputs/apk/release` directory.
+This creates a release APK in `app/build/outputs/apk/release`.
 
 ## Workflow
 
