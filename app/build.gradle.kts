@@ -251,6 +251,9 @@ dependencies {
     // HTTP client
     implementation(libs.squareup.okhttp)
 
+    // File picker
+    implementation(libs.newpipe.filepicker)
+
     // HarmonyStream API client
     implementation(libs.squareup.retrofit.core)
     implementation(libs.squareup.retrofit.gson)

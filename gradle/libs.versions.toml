@@ -49,6 +49,7 @@ rxjava = "3.1.12"
 sonarqube = "7.2.2.6593"
 statesaver = "1.4.1" # TODO: Drop because it is deprecated and incompatible with KSP2
 stetho = "1.6.0"
+teamnewpipe-filepicker = "5.0.0"
 swiperefreshlayout = "1.2.0"
 # You can use a local version by uncommenting a few lines in settings.gradle
 # Or you can use a commit you pushed to GitHub by just replacing TeamNewPipe with your GitHub
@@ -115,6 +116,7 @@ livefront-bridge = { module = "com.github.livefront:bridge", version.ref = "brid
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 noties-markwon-core = { module = "io.noties.markwon:core", version.ref = "markwon" }
 noties-markwon-linkify = { module = "io.noties.markwon:linkify", version.ref = "markwon" }
+newpipe-filepicker = { module = "com.github.TeamNewPipe:NoNonsense-FilePicker", version.ref = "teamnewpipe-filepicker" }
 ocpsoft-prettytime = { module = "org.ocpsoft.prettytime:prettytime", version.ref = "prettytime" }
 pinterest-ktlint = { module = "com.pinterest.ktlint:ktlint-cli", version.ref = "ktlint" }
 puppycrawl-checkstyle = { module = "com.puppycrawl.tools:checkstyle", version.ref = "checkstyle" }
