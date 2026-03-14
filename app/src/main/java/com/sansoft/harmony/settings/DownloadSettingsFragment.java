@@ -18,14 +18,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreferenceCompat;
 
-import com.nononsenseapps.filepicker.Utils;
 
 import com.sansoft.harmony.R;
 import com.sansoft.harmony.streams.io.NoFileManagerSafeGuard;
 import com.sansoft.harmony.streams.io.StoredDirectoryHelper;
-import com.sansoft.harmony.util.FilePickerActivityHelper;
 
-import java.io.File;
 import java.io.IOException;
 
 public class DownloadSettingsFragment extends BasePreferenceFragment {
@@ -226,34 +223,24 @@ public class DownloadSettingsFragment extends BasePreferenceFragment {
 
         forgetSAFTree(context, defaultPreferences.getString(key, ""));
 
-        if (!FilePickerActivityHelper.isOwnFileUri(context, uri)) {
-            // steps to acquire the selected path:
-            //     1. acquire permissions on the new save path
-            //     2. save the new path, if step(2) was successful
-            try {
-                context.grantUriPermission(context.getPackageName(), uri,
-                        StoredDirectoryHelper.PERMISSION_FLAGS);
+        // steps to acquire the selected path:
+        //     1. acquire permissions on the new save path
+        //     2. save the new path, if step(2) was successful
+        try {
+            context.grantUriPermission(context.getPackageName(), uri,
+                    StoredDirectoryHelper.PERMISSION_FLAGS);
 
-                final StoredDirectoryHelper mainStorage =
-                        new StoredDirectoryHelper(context, uri, null);
-                Log.i(TAG, "Acquiring tree success from " + uri.toString());
+            final StoredDirectoryHelper mainStorage =
+                    new StoredDirectoryHelper(context, uri, null);
+            Log.i(TAG, "Acquiring tree success from " + uri.toString());
 
-                if (!mainStorage.canWrite()) {
-                    throw new IOException("No write permissions on " + uri.toString());
-                }
-            } catch (final IOException err) {
-                Log.e(TAG, "Error acquiring tree from " + uri.toString(), err);
-                showMessageDialog(R.string.general_error, R.string.no_available_dir);
-                return;
+            if (!mainStorage.canWrite()) {
+                throw new IOException("No write permissions on " + uri.toString());
             }
-        } else {
-            final File target = Utils.getFileForUri(uri);
-            if (!target.canWrite()) {
-                showMessageDialog(R.string.download_to_sdcard_error_title,
-                        R.string.download_to_sdcard_error_message);
-                return;
-            }
-            uri = Uri.fromFile(target);
+        } catch (final IOException err) {
+            Log.e(TAG, "Error acquiring tree from " + uri.toString(), err);
+            showMessageDialog(R.string.general_error, R.string.no_available_dir);
+            return;
         }
 
         defaultPreferences.edit().putString(key, uri.toString()).apply();

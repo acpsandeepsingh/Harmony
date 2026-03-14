@@ -91,7 +91,8 @@ public class VideoRepository {
 
     @NonNull
     private VideoItem toVideoItem(@NonNull final Video video) {
-        return new VideoItem(video.videoId, video.title, video.channel, video.thumbnail, video.duration);
+        return new VideoItem(video.videoId, video.title, video.channel,
+                video.thumbnail, video.duration);
     }
 
     @NonNull

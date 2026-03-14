@@ -28,13 +28,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.nononsenseapps.filepicker.Utils;
 
 import com.sansoft.harmony.R;
 import com.sansoft.harmony.settings.NewPipeSettings;
 import com.sansoft.harmony.streams.io.NoFileManagerSafeGuard;
 import com.sansoft.harmony.streams.io.StoredFileHelper;
-import com.sansoft.harmony.util.FilePickerActivityHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -327,10 +325,7 @@ public class MissionsFragment extends Fragment {
         }
 
         try {
-            Uri fileUri = result.getData().getData();
-            if (fileUri.getAuthority() != null && FilePickerActivityHelper.isOwnFileUri(mContext, fileUri)) {
-                fileUri = Uri.fromFile(Utils.getFileForUri(fileUri));
-            }
+            final Uri fileUri = result.getData().getData();
 
             String tag = unsafeMissionTarget.storage.getTag();
             unsafeMissionTarget.storage = new StoredFileHelper(mContext, null, fileUri, tag);
