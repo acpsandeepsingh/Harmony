@@ -251,6 +251,10 @@ dependencies {
     // HTTP client
     implementation(libs.squareup.okhttp)
 
+    // Required by FilePickerActivityHelper + FilePickerTheme* (NNF_BaseTheme/nnf_* attrs)
+    // for non-SAF file and directory picking flows.
+    implementation(libs.newpipe.filepicker)
+
     // HarmonyStream API client
     implementation(libs.squareup.retrofit.core)
     implementation(libs.squareup.retrofit.gson)
