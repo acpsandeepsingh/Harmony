@@ -8,12 +8,17 @@ fail() { echo "❌ $1"; exit 1; }
 warn() { echo "⚠️  $1"; }
 pass() { echo "✅ $1"; }
 
-if [[ ! -f "$LOCAL_PROPS" ]]; then
-  fail "local.properties not found. Create it from local.properties.example and set sdk.dir."
+sdk_dir=""
+
+if [[ -f "$LOCAL_PROPS" ]]; then
+  sdk_dir=$(awk -F= '/^sdk\.dir=/{print substr($0,index($0,$2))}' "$LOCAL_PROPS" | sed 's#\\:#:#g' | tail -n1)
 fi
 
-sdk_dir=$(awk -F= '/^sdk\.dir=/{print substr($0,index($0,$2))}' "$LOCAL_PROPS" | sed 's#\\:#:#g' | tail -n1)
-[[ -n "$sdk_dir" ]] || fail "sdk.dir not set in local.properties"
+if [[ -z "$sdk_dir" ]]; then
+  sdk_dir="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+fi
+
+[[ -n "$sdk_dir" ]] || fail "Android SDK location not found. Set sdk.dir in local.properties or export ANDROID_HOME/ANDROID_SDK_ROOT."
 [[ -d "$sdk_dir" ]] || fail "sdk.dir path does not exist: $sdk_dir"
 pass "Android SDK found at: $sdk_dir"
 

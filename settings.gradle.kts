@@ -3,6 +3,25 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+
+import java.util.Properties
+
+val localPropertiesFile = file("local.properties")
+if (!localPropertiesFile.exists()) {
+    val sdkFromEnv = sequenceOf("ANDROID_HOME", "ANDROID_SDK_ROOT")
+        .mapNotNull { System.getenv(it) }
+        .firstOrNull { it.isNotBlank() }
+
+    if (sdkFromEnv != null) {
+        val generatedProperties = Properties().apply {
+            setProperty("sdk.dir", sdkFromEnv)
+        }
+
+        localPropertiesFile.outputStream().use { generatedProperties.store(it, null) }
+        println("Generated local.properties from ANDROID_HOME/ANDROID_SDK_ROOT for this build.")
+    }
+}
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
