@@ -37,7 +37,15 @@ sdk.dir=/absolute/path/to/Android/Sdk
 
 Without this file (or a valid `ANDROID_HOME`/`ANDROID_SDK_ROOT`), Gradle fails with `SDK location not found`.
 
-## 3. Build the APK
+## 3. Install required Android SDK packages
+
+Install these SDK components in your Android SDK manager:
+
+- Android SDK Platform 35
+- Android SDK Build-Tools 35.0.0
+- Android SDK Command-line Tools (latest)
+
+## 4. Build the APK
 
 Once Java and SDK are configured, build the APK using:
 
@@ -47,7 +55,7 @@ Once Java and SDK are configured, build the APK using:
 
 This will create a debug APK in the `app/build/outputs/apk/debug` directory.
 
-## 4. Build APK in GitHub Actions
+## 5. Build APK in GitHub Actions
 
 A GitHub Actions workflow is available at `.github/workflows/build-release-apk.yml`.
 

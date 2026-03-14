@@ -30,7 +30,9 @@ kotlin {
 }
 
 configure<ApplicationExtension> {
-    compileSdk = 36
+    // Keep compile SDK on a stable, publicly available API level so local builds
+    // work out-of-the-box with the standard Android SDK installation.
+    compileSdk = 35
     namespace = "com.sansoft.harmony"
 
     defaultConfig {

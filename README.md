@@ -27,6 +27,11 @@ Then edit `local.properties` and set `sdk.dir` to your Android SDK directory.
 
 2. Build a debug APK:
 
+Make sure your Android SDK includes:
+
+* Android SDK Platform 35
+* Android SDK Build-Tools 35.0.0
+
 ```bash
 ./gradlew assembleDebug
 ```
