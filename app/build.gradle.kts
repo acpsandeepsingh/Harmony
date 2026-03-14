@@ -215,11 +215,6 @@ dependencies {
     /** Desugaring **/
     coreLibraryDesugaring(libs.android.desugar)
 
-    /** NewPipe libraries **/
-    implementation(libs.newpipe.nanojson)
-    implementation(libs.newpipe.extractor)
-    implementation(libs.newpipe.filepicker)
-
     /** Checkstyle **/
     checkstyle(libs.puppycrawl.checkstyle)
     ktlint(libs.pinterest.ktlint)
@@ -255,6 +250,11 @@ dependencies {
 
     // HTTP client
     implementation(libs.squareup.okhttp)
+
+    // HarmonyStream API client
+    implementation(libs.squareup.retrofit.core)
+    implementation(libs.squareup.retrofit.gson)
+    implementation(libs.google.gson)
 
     // Media player
     implementation(libs.google.exoplayer.core)
