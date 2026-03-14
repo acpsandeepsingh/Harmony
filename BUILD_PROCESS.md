@@ -35,7 +35,7 @@ cp local.properties.example local.properties
 sdk.dir=/absolute/path/to/Android/Sdk
 ```
 
-Without this file (or a valid `ANDROID_HOME`/`ANDROID_SDK_ROOT`), Gradle fails with `SDK location not found`.
+If this file is missing, the Gradle settings now auto-generate it from `ANDROID_HOME` or `ANDROID_SDK_ROOT` when either environment variable is set.
 
 ## 3. Install required Android SDK packages
 

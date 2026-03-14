@@ -25,7 +25,7 @@ The project uses the Gradle Java toolchain and requires Java 25 for local builds
 cp local.properties.example local.properties
 ```
 
-Then edit `local.properties` and set `sdk.dir` to your Android SDK directory.
+Then edit `local.properties` and set `sdk.dir` to your Android SDK directory. If `local.properties` is missing, the build now auto-detects `ANDROID_HOME`/`ANDROID_SDK_ROOT` and generates it for you.
 
 Run the environment preflight check:
 
