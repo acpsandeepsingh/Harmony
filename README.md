@@ -37,8 +37,7 @@ Run the environment preflight check:
 
 Make sure your Android SDK includes:
 
-* Android SDK Platform 36 (default project compile SDK)
-* Android SDK Platform 35 (optional local fallback)
+* Android SDK Platform 35
 * Android SDK Build-Tools 35.0.0
 
 ```bash

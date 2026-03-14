@@ -38,9 +38,9 @@ val targetSdkVersion = providers.gradleProperty("android.targetSdk")
     .getOrElse(35)
 
 configure<ApplicationExtension> {
-    // Keep project defaults while allowing local overrides for SDK availability:
-    //   ./gradlew assembleDebug -Pandroid.compileSdk=35 -Pandroid.targetSdk=35
-    compileSdk = compileSdkVersion
+    // Keep compile SDK on a stable, publicly available API level so local builds
+    // work out-of-the-box with the standard Android SDK installation.
+    compileSdk = 35
     namespace = "com.sansoft.harmony"
 
     defaultConfig {
