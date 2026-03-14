@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.documentfile.provider.DocumentFile;
 
 import com.sansoft.harmony.MainActivity;
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
