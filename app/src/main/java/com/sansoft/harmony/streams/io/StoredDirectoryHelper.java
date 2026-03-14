@@ -19,9 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.documentfile.provider.DocumentFile;
 
-import com.sansoft.harmony.settings.NewPipeSettings;
-import com.sansoft.harmony.util.FilePickerActivityHelper;
-
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.net.URI;
@@ -386,17 +383,9 @@ public class StoredDirectoryHelper {
     }
 
     public static Intent getPicker(final Context ctx) {
-        if (NewPipeSettings.useStorageAccessFramework(ctx)) {
-            return new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                    .putExtra("android.content.extra.SHOW_ADVANCED", true)
-                    .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
-                            | StoredDirectoryHelper.PERMISSION_FLAGS);
-        } else {
-            return new Intent(ctx, FilePickerActivityHelper.class)
-                    .putExtra(FilePickerActivityHelper.EXTRA_ALLOW_MULTIPLE, false)
-                    .putExtra(FilePickerActivityHelper.EXTRA_ALLOW_CREATE_DIR, true)
-                    .putExtra(FilePickerActivityHelper.EXTRA_MODE,
-                            FilePickerActivityHelper.MODE_DIR);
-        }
+        return new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                .putExtra("android.content.extra.SHOW_ADVANCED", true)
+                .addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+                        | StoredDirectoryHelper.PERMISSION_FLAGS);
     }
 }

@@ -40,7 +40,6 @@ import androidx.preference.PreferenceManager;
 
 import com.evernote.android.state.State;
 import com.livefront.bridge.Bridge;
-import com.nononsenseapps.filepicker.Utils;
 
 import com.sansoft.harmony.MainActivity;
 import com.sansoft.harmony.R;
@@ -62,7 +61,6 @@ import com.sansoft.harmony.streams.io.StoredDirectoryHelper;
 import com.sansoft.harmony.streams.io.StoredFileHelper;
 import com.sansoft.harmony.util.AudioTrackAdapter;
 import com.sansoft.harmony.util.AudioTrackAdapter.AudioTracksWrapper;
-import com.sansoft.harmony.util.FilePickerActivityHelper;
 import com.sansoft.harmony.util.FilenameUtils;
 import com.sansoft.harmony.util.ListHelper;
 import com.sansoft.harmony.util.PermissionHelper;
@@ -495,13 +493,6 @@ public class DownloadDialog extends DialogFragment
             return;
         }
 
-        if (FilePickerActivityHelper.isOwnFileUri(context, result.getData().getData())) {
-            final File file = Utils.getFileForUri(result.getData().getData());
-            checkSelectedDownload(null, Uri.fromFile(file), file.getName(),
-                    StoredFileHelper.DEFAULT_MIME);
-            return;
-        }
-
         final DocumentFile docFile = DocumentFile.fromSingleUri(context,
                 result.getData().getData());
         if (docFile == null) {
@@ -526,13 +517,9 @@ public class DownloadDialog extends DialogFragment
             return;
         }
 
-        Uri uri = result.getData().getData();
-        if (FilePickerActivityHelper.isOwnFileUri(context, uri)) {
-            uri = Uri.fromFile(Utils.getFileForUri(uri));
-        } else {
-            context.grantUriPermission(context.getPackageName(), uri,
-                    StoredDirectoryHelper.PERMISSION_FLAGS);
-        }
+        final Uri uri = result.getData().getData();
+        context.grantUriPermission(context.getPackageName(), uri,
+                StoredDirectoryHelper.PERMISSION_FLAGS);
 
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(key,
                 uri.toString()).apply();
