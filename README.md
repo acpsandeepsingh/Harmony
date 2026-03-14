@@ -17,6 +17,8 @@ The project is a standard Android application with a few key directories:
 
 The project is built using Gradle and requires a local Android SDK installation.
 
+The project uses the Gradle Java toolchain and requires Java 25 for local builds.
+
 1. Copy the example file and set your SDK path:
 
 ```bash
@@ -25,10 +27,28 @@ cp local.properties.example local.properties
 
 Then edit `local.properties` and set `sdk.dir` to your Android SDK directory.
 
+Run the environment preflight check:
+
+```bash
+./scripts/verify-android-env.sh
+```
+
 2. Build a debug APK:
+
+Make sure your Android SDK includes:
+
+* Android SDK Platform 36 (default project compile SDK)
+* Android SDK Platform 35 (optional local fallback)
+* Android SDK Build-Tools 35.0.0
 
 ```bash
 ./gradlew assembleDebug
+```
+
+If Platform 36 is not installed locally yet, use:
+
+```bash
+./gradlew assembleDebug -Pandroid.compileSdk=35 -Pandroid.targetSdk=35
 ```
 
 This creates a debug APK in `app/build/outputs/apk/debug`.

@@ -29,15 +29,25 @@ kotlin {
     }
 }
 
+val compileSdkVersion = providers.gradleProperty("android.compileSdk")
+    .map(String::toInt)
+    .getOrElse(36)
+
+val targetSdkVersion = providers.gradleProperty("android.targetSdk")
+    .map(String::toInt)
+    .getOrElse(35)
+
 configure<ApplicationExtension> {
-    compileSdk = 36
+    // Keep project defaults while allowing local overrides for SDK availability:
+    //   ./gradlew assembleDebug -Pandroid.compileSdk=35 -Pandroid.targetSdk=35
+    compileSdk = compileSdkVersion
     namespace = "com.sansoft.harmony"
 
     defaultConfig {
         applicationId = "com.sansoft.harmony"
         resValue("string", "app_name", "Harmony")
         minSdk = 21
-        targetSdk = 35
+        targetSdk = targetSdkVersion
 
         versionCode = System.getProperty("versionCodeOverride")?.toInt() ?: 1008
 
