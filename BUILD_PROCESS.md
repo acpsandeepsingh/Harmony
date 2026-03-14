@@ -4,7 +4,7 @@ This document outlines the process for building the Harmony Music Player APK.
 
 ## 1. Configure Java Toolchain
 
-The project requires Java 17. To ensure the correct JDK is used, the `foojay-resolver-convention` plugin is used to automatically download the correct JDK. This is configured in the `settings.gradle.kts` file:
+The project requires Java 25 (as configured by the Gradle toolchain in the app module). To ensure the correct JDK is used, the `foojay-resolver-convention` plugin is used to automatically download the correct JDK. This is configured in the `settings.gradle.kts` file:
 
 ```kotlin
 pluginManagement {

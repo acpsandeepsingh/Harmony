@@ -29,6 +29,14 @@ kotlin {
     }
 }
 
+val compileSdkVersion = providers.gradleProperty("android.compileSdk")
+    .map(String::toInt)
+    .getOrElse(36)
+
+val targetSdkVersion = providers.gradleProperty("android.targetSdk")
+    .map(String::toInt)
+    .getOrElse(35)
+
 configure<ApplicationExtension> {
     // Keep compile SDK on a stable, publicly available API level so local builds
     // work out-of-the-box with the standard Android SDK installation.
@@ -39,7 +47,7 @@ configure<ApplicationExtension> {
         applicationId = "com.sansoft.harmony"
         resValue("string", "app_name", "Harmony")
         minSdk = 21
-        targetSdk = 35
+        targetSdk = targetSdkVersion
 
         versionCode = System.getProperty("versionCodeOverride")?.toInt() ?: 1008
 
